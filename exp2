@@ -1,0 +1,40 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Inputs
+total_channels = 10 + 10
+R, N, cells = 15, 7, 21
+users_per_channel = 30
+
+# Calculations
+D = np.sqrt(3 * N) * R
+capacity = total_channels * users_per_channel * cells
+
+print("Total Channels =", total_channels)
+print("Reuse Distance = %.2f km" % D)
+print("Channels per Cell = %.2f" % (total_channels / N))
+print("Estimated Capacity =", capacity, "users")
+
+# Traffic Simulation
+traffic = np.random.randint(50, 101, cells)
+allocated = np.minimum(traffic, total_channels * users_per_channel)
+
+# Graphs
+plt.figure()
+plt.bar(range(1, cells + 1), traffic)
+plt.title("Traffic Demand per Cell")
+
+plt.figure()
+plt.bar(range(1, cells + 1), allocated)
+plt.title("Allocated Users per Cell")
+
+# Call Drop
+drop_rate = np.maximum(0, (traffic - allocated) / traffic)
+
+plt.figure()
+plt.plot(drop_rate, linewidth=2)
+plt.title("Call Drop Rate")
+
+print("Average Call Drop Rate = %.4f" % np.mean(drop_rate))
+
+plt.show()
